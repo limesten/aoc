@@ -38,7 +38,8 @@ func formatData(game string) Game {
 	gameFormatted := Game{}
 	gameNumber := extractGameNumber(game)
 	gameFormatted.Number = gameNumber
-	g := game[8:]
+	i := strings.Index(game, ":")
+	g := game[i+1:]
 	showings := strings.Split(g, ";")
 	for _, s := range showings {
 		showing := Showing{}
@@ -88,6 +89,29 @@ func partOne(games []Game) {
 	fmt.Println(doableGameIdSum)
 }
 
+func partTwo(games []Game) {
+	total := 0
+	for _, game := range games {
+		highestRed := 0
+		highestGreen := 0
+		highestBlue := 0
+		for _, showing := range game.Showings {
+			if showing.Red > highestRed {
+				highestRed = showing.Red
+			}
+			if showing.Green > highestGreen {
+				highestGreen = showing.Green
+			}
+			if showing.Blue > highestBlue {
+				highestBlue = showing.Blue
+			}
+		}
+		gamePower := highestRed * highestGreen * highestBlue
+		total += gamePower
+	}
+	fmt.Println(total)
+}
+
 func main() {
 	filePath := "./input.txt"
 	content := readFile(filePath)
@@ -101,4 +125,5 @@ func main() {
 	}
 
 	partOne(games)
+	partTwo(games)
 }
